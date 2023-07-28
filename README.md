@@ -5,8 +5,9 @@ Once you clone repository:
 
 Run following commands one after another
 
-docker compose up --build --wait
-docker compose alpha watch
+``docker compose up --build --wait``
+
+``docker compose alpha watch``
 
 ![image](https://github.com/sonawane-yogesh/docker-watch/assets/56105042/71cd5412-45e6-491c-8330-bea7765a8724)
 
