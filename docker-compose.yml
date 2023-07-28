@@ -1,0 +1,14 @@
+version: "3"
+services:
+  app:
+    image: docker-watch
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000        
+    x-develop: 
+      watch:          
+        - path: src/
+          target: /app/src/
+          action: sync  
