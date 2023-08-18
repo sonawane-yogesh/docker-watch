@@ -14,5 +14,4 @@ app.get("/subtract", function (request, response) {
 });
 app.listen(4000, function () {
     console.log("Server is up and running now on port: 4000");
-    console.log("added line");
 });
