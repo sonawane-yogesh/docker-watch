@@ -9,5 +9,7 @@ module.exports = {
         return a * b;
     }, justAdd: function (a, b) {
         return a + b;
+    }, justMultiply: function (a, b) {
+        return a * b;
     }
 };
