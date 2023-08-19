@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE_NAME = "docker-watch"
+        DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
+        DOCKER_TAG = "${env.BUILD_NUMBER}"  // You can use any versioning strategy here
+    }
     stages {
         stage('Run npm install') {
             steps {
@@ -12,6 +17,26 @@ pipeline {
                 echo 'Starting server application...'
             }
         }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_TAG}", ".")                    
+                    // Tag the image with latest and push to Docker Hub
+                    dockerImage.push()
+                    dockerImage.tag("${DOCKER_IMAGE_NAME}:latest")
+                    dockerImage.push()                    
+                    // Tag the image with the specified version and push to Docker Hub
+                    dockerImage.tag("${DOCKER_HUB_REPO}:${DOCKER_TAG}")
+                    dockerImage.push()
+                }
+            }
+        }
+        /*
         stage('Publish Docker Image') {
             steps {
                 script {                
@@ -24,6 +49,7 @@ pipeline {
                 }    
             }
         }
+        */
         stage('Deploy with Helm') {
             steps {
                 script {
