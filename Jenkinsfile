@@ -31,7 +31,7 @@ pipeline {
                 }
             }            
         }
-        stage('Docker Login') {
+        stage('Docker Login First Stage') {
             steps {
                 script {
                     def dockerHubCredentials = credentials('docker-hub-credentials')
