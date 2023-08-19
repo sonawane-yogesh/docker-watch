@@ -9,7 +9,7 @@ pipeline {
         stage('Run npm install') {
             steps {
                 echo 'Running npm install command...'
-                npm install
+                // npm install
             }
         }
         stage('Run start command') {
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                checkout scm
+                // checkout scm
             }
         }
         stage('Build and Push Docker Image') {
