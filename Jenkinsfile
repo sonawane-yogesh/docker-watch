@@ -23,6 +23,15 @@ pipeline {
                 // checkout scm
             }
         }
+        stage('Initialize') {
+            steps {
+                script {
+                    def dockerHome = tool 'Jenkins-docker'
+                    env.PATH = "${dockerHome}/bin:${env.PATH}"
+                }
+            }
+            
+        }
         stage('Build and Push Docker Image') {
             steps {
                 script {
