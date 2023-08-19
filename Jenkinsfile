@@ -37,7 +37,7 @@ pipeline {
                     echo 'hub.docker.com login...'
                     withCredentials([usernamePassword( credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
                     {
-                        docker.withRegistry('sonawaneyogeshb/docker-watch', 'docker-private-credentials') 
+                        docker.withRegistry('', 'docker-private-credentials') 
                         {
                             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                         }
