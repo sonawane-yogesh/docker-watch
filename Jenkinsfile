@@ -34,14 +34,8 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    echo 'hub.docker.com login...'
-                    withCredentials([usernamePassword( credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
-                    {
-                        docker.withRegistry('', 'docker-hub-credentials') 
-                        {
-                            sh "docker login -u sonawaneyogeshb@gmail.com -p NjSoft@123"
-                        }
-                    }
+                    echo 'hub.docker.com login...'                    
+                    sh "docker login -u sonawaneyogeshb@gmail.com -p NjSoft@123"                        
                 }    
             }
         }
