@@ -34,6 +34,16 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
+                    def dockerHubCredentials = credentials('docker-hub-credentials')
+                    withCredentials([string(credentialsId: dockerHubCredentials, variable: 'DOCKERHUB_TOKEN')]) {
+                        sh 'echo $DOCKERHUB_TOKEN | docker login -u sonawaneyogeshb@gmail.com --password-stdin'
+                    }
+                }
+            }
+        }
+        stage('Docker Login') {
+            steps {
+                script {
                     echo 'hub.docker.com login...'
                     withCredentials([usernamePassword( credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
                     {
