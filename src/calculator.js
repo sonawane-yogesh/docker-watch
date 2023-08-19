@@ -7,5 +7,7 @@ module.exports = {
         return a / b;
     }, multiply: function (a, b) {
         return a * b;
+    }, justAdd: function (a, b) {
+        return a + b;
     }
 };
