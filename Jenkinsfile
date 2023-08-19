@@ -29,8 +29,19 @@ pipeline {
                     def dockerHome = tool 'Jenkins-docker'
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
+            }            
+        }
+        stage('Docker Login') {
+            steps {
+                echo 'hub.docker.com login...'
+                withCredentials([usernamePassword( credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
+                {
+                    docker.withRegistry('', 'docker-hub-credentials') 
+                    {
+                        sh "docker login -u sonawaneyogeshb@gmail.com -p NjSoft@123"
+                    }
+                }    
             }
-            
         }
         stage('Build and Push Docker Image') {
             steps {
