@@ -19,12 +19,13 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                // checkout scm
+                echo ' Checkout'
             }
         }
         stage('Build and Push Docker Image') {
             steps {
                 script {
+                    echo 'Building docker image...'
                     def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_TAG}", ".")                    
                     // Tag the image with latest and push to Docker Hub
                     dockerImage.push()
