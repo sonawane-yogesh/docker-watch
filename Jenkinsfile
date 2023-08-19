@@ -27,7 +27,6 @@ pipeline {
             steps {
                 script {
                     echo 'Building docker image...'
-                    /*
                     def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_TAG}", ".")                    
                     // Tag the image with latest and push to Docker Hub
                     dockerImage.push()
@@ -36,7 +35,6 @@ pipeline {
                     // Tag the image with the specified version and push to Docker Hub
                     dockerImage.tag("${DOCKER_HUB_REPO}:${DOCKER_TAG}")
                     dockerImage.push()
-                    */
                 }
             }
         }
