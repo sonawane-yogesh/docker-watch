@@ -54,16 +54,24 @@ pipeline {
             }
         }
         */        
-        stage('Publish Docker Image') {
+        stage('Build Docker Image') {
             steps {
-                script {                
-                    echo 'Building docker image...'
-                    docker build -t docker-watch:latest -f Dockerfile .
-                    echo 'Docker tag creation...'
-                    docker tag docker-watch:latest sonawaneyogeshb/docker-watch:latest
-                    echo 'Pushing docker image...'
-                    docker push sonawaneyogeshb/docker-watch:latest
-                }    
+                script {
+                    def imageName = 'docker-watch'
+                    def imageTag = env.BUILD_NUMBER
+                    // Build the Docker image
+                    sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def imageName = 'docker-watch'
+                    def imageTag = env.BUILD_NUMBER                    
+                    // Push the Docker image
+                    sh "docker push ${imageName}:${imageTag}"
+                }
             }
         }        
         stage('Deploy with Helm') {
