@@ -27,11 +27,16 @@ pipeline {
             steps {
                 script {
                     echo 'hub.docker.com login...'
+                    def imageName = 'docker-watch'
+                    def imageTag = env.BUILD_NUMBER
                     withCredentials([usernamePassword( credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
                     {
                         docker.withRegistry('', 'docker-private-credentials') 
                         {
                             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                            sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
+                            sh "docker tag ${imageName}:${imageTag} ${USERNAME}/${imageName}:${imageTag}"
+                            sh "docker push ${USERNAME}/${imageName}:${imageTag} --debug"
                         }
                     }
                 }    
@@ -53,7 +58,8 @@ pipeline {
                 }
             }
         }
-        */        
+        */  
+        /*      
         stage('Build Docker Image') {
             steps {
                 script {
@@ -70,10 +76,11 @@ pipeline {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
                     sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                    sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
+                    sh "docker push sonawaneyogeshb/${imageName}:${imageTag} --debug"
                 }
             }
         }
+        */
         stage('Push Docker Image') {
             steps {
                 script {
