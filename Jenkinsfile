@@ -30,57 +30,15 @@ pipeline {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
                     withCredentials([usernamePassword( credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
-                    {
-                        docker.withRegistry('', 'docker-private-credentials') 
-                        {
-                            sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-                            sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
-                            sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                            sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
-                        }
+                    {                        
+                        sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                        sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
+                        sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
+                        sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"                     
                     }
                 }    
             }
         }
-        /*
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    echo 'Building docker image...'
-                    def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_TAG}", ".")                    
-                    // Tag the image with latest and push to Docker Hub
-                    dockerImage.push()
-                    dockerImage.tag("${DOCKER_IMAGE_NAME}:latest")
-                    dockerImage.push()                    
-                    // Tag the image with the specified version and push to Docker Hub
-                    dockerImage.tag("${DOCKER_HUB_REPO}:${DOCKER_TAG}")
-                    dockerImage.push()
-                }
-            }
-        }
-        */  
-        /*      
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def imageName = 'docker-watch'
-                    def imageTag = env.BUILD_NUMBER
-                    // Build the Docker image
-                    sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
-                }
-            }
-        }
-        stage('DOcker Tag Creation') {
-            steps {
-                script {
-                    def imageName = 'docker-watch'
-                    def imageTag = env.BUILD_NUMBER
-                    sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                    sh "docker push sonawaneyogeshb/${imageName}:${imageTag} --debug"
-                }
-            }
-        }
-        */
         stage('Push Docker Image') {
             steps {
                 script {
