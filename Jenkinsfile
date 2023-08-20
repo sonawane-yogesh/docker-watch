@@ -70,16 +70,14 @@ pipeline {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
                     sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
+                    sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
                 script {
-                    def imageName = 'docker-watch'
-                    def imageTag = env.BUILD_NUMBER                    
-                    // Push the Docker image
-                    sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
+                    echo 'Pushed docker image to hub.docker.com'
                 }
             }
         }        
