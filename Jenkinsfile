@@ -37,6 +37,7 @@ pipeline {
                 }    
             }
         }
+        /*
         stage('Build and Push Docker Image') {
             steps {
                 script {
@@ -52,7 +53,7 @@ pipeline {
                 }
             }
         }
-        /*
+        */        
         stage('Publish Docker Image') {
             steps {
                 script {                
@@ -64,8 +65,7 @@ pipeline {
                     docker push sonawaneyogeshb/docker-watch:latest
                 }    
             }
-        }
-        */
+        }        
         stage('Deploy with Helm') {
             steps {
                 script {
