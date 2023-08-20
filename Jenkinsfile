@@ -64,13 +64,22 @@ pipeline {
                 }
             }
         }
+        stage('DOcker Tag Creation') {
+            steps {
+                script {
+                    def imageName = 'docker-watch'
+                    def imageTag = env.BUILD_NUMBER
+                    sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
+                }
+            }
+        }
         stage('Push Docker Image') {
             steps {
                 script {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER                    
                     // Push the Docker image
-                    sh "docker push ${imageName}:${imageTag}"
+                    sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
                 }
             }
         }        
