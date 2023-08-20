@@ -22,15 +22,7 @@ pipeline {
                 echo 'Checkout'
                 // checkout scm
             }
-        }
-        stage('Initialize') {
-            steps {
-                script {
-                    def dockerHome = tool 'Jenkins-docker'
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"
-                }
-            }            
-        }       
+        }     
         stage('Docker Login') {
             steps {
                 script {
