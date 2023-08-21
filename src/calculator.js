@@ -11,5 +11,7 @@ module.exports = {
         return a + b;
     }, justMultiply: function (a, b) {
         return a * b;
+    }, argoCheck: function (message) {
+        return "Hello, from ArgoCD " + message;
     }
 };
