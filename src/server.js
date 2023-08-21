@@ -12,6 +12,6 @@ app.get("/subtract", function (request, response) {
     let subtract = maths.subtract(6, 9);
     response.status(200).json({ data: subtract }).end();
 });
-app.listen(4000, function () {
-    console.log("Server is up and running now on port: 4000");
+app.listen(8080, function () {
+    console.log("Server is up and running now on port: 8080");
 });
