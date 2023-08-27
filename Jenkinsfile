@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to local Kubernetes...' 
-                    sh "kubectl apply -f deployment.yaml"
+                    sh "kubectl apply -f ./deployment/deployment.yaml"
                 }
             }
         }

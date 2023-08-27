@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: docker-watch
+  name: docker-watch-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: docker-watch  # Matches the labels in the template
+      app: docker-watch
   template:
     metadata:
       labels:
@@ -16,3 +16,5 @@ spec:
         - name: docker-watch-container
           image: docker-watch:latest
           imagePullPolicy: IfNotPresent  # Set the image pull policy here
+          ports:
+            - containerPort: 8080
