@@ -5,8 +5,8 @@ Once you clone repository:
 
 Run following commands one after another
 
-``docker compose up --build --wait``
+``docker-compose up --build --wait``
 
-``docker compose alpha watch``
+``docker-compose alpha watch``
 
 After that, try changing any files and you will notice changes right inside the container.
