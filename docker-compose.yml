@@ -11,4 +11,6 @@ services:
       watch:          
         - path: src/
           target: /app/src/
-          action: sync  
+          action: sync
+    volumes:
+      - D:\docker-projects\docker-watch:/app     
