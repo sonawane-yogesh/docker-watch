@@ -3,7 +3,8 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
-        DOCKER_TAG = "${env.BUILD_NUMBER}"  // You can use any versioning strategy here
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        PATH = "/usr/local/bin:${env.PATH}"
     }
     stages {
         stage('Run npm install') {
