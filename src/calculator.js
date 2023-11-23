@@ -11,5 +11,10 @@ module.exports = {
         return a + b;
     }, justMultiply: function (a, b) {
         return a * b;
+    }, watchCheck: function(){
+        return true;
     }
 };
+
+// yogesh sonawane
+// sonawane yogesh
