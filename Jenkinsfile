@@ -4,7 +4,12 @@ pipeline {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
-        PATH = "/usr/local/bin:${env.PATH}"
+        PATH = "/usr/bin:${env.PATH}"
+        echo $PATH
+    }
+    stage('Initialize'){
+        def dockerHome = tool 'docker-watch'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
     stages {
         stage('Run npm install') {
@@ -22,6 +27,20 @@ pipeline {
             steps {
                 echo 'Checkout'
                 // checkout scm
+            }
+        }
+        stage('Docker Login and Push') {
+            steps {
+                script {
+                    def imageName = 'docker-watch'
+                    def imageTag = env.BUILD_NUMBER
+                    withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login -u ${USERNAME} -p ${PASSWORD}"                        
+                        sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
+                        sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
+                        sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
+                    }
+                }
             }
         } 
         stage('Docker Login and Push') {
