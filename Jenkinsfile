@@ -30,11 +30,13 @@ pipeline {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
                     withCredentials([usernamePassword( credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
-                    {                        
+                    {
+                        sh """                        
                         sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                         sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
                         sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                        sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"                     
+                        sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
+                        """
                     }
                 }    
             }
