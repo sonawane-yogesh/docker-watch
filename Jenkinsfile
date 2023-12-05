@@ -4,15 +4,11 @@ pipeline {
     DOCKERHUB_CREDENTIALS = credentials('docker-private-credentials')
   }
   stages {
-    stage('Build') {
-      steps {
-        sh './jenkins/build.sh'       
-      }
-    }
+   
     stage('Login') {
       steps {
-        sh './jenkins/login.sh'
-         echo 'Login Completed'
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'                		
+	    echo 'Login Completed' 
       }
     }
     stage('Push') {
