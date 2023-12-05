@@ -8,8 +8,12 @@ pipeline {
     }    
     stages {
         stage('Initialize') {
-            def dockerHome = tool 'docker-watch'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
+            steps {
+                script {
+                    dockerHome = tool 'docker-watch'
+                    env.PATH = "${dockerHome}/bin:${env.PATH}"
+                }
+            }
         }
         stage('Run npm install') {
             steps {
@@ -42,7 +46,7 @@ pipeline {
                 }
             }
         } 
-        stage('Docker Login and Push') {
+        stage('Docker Login and Push Other Try') {
             steps {
                 script {
                     def imageName = 'docker-watch'
