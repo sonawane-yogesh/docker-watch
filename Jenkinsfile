@@ -4,14 +4,13 @@ pipeline {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
-        PATH = "/usr/bin:${env.PATH}"
-        echo $PATH
-    }
-    stage('Initialize'){
-        def dockerHome = tool 'docker-watch'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
+        PATH = "/usr/bin:${env.PATH}"        
+    }    
     stages {
+        stage('Initialize') {
+            def dockerHome = tool 'docker-watch'
+            env.PATH = "${dockerHome}/bin:${env.PATH}"
+        }
         stage('Run npm install') {
             steps {
                 echo 'Running npm install command...'
