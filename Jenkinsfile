@@ -24,19 +24,6 @@ pipeline {
                 // checkout scm
             }
         }
-        stage('Check Docker Login Only') {
-          steps {
-            script {
-                def dockerLoginCommand = "docker login -u sonawaneyogeshb --password-stdin"
-                withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                  sh "${dockerLoginCommand}".execute().in.with {
-                      it.write("${PASSWORD}\n".getBytes())
-                      it.flush()
-                  }
-                }
-            }
-          }
-        }
         stage('Docker Login and Push') {
             steps {
                 script {
