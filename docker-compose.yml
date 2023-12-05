@@ -5,10 +5,20 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    expose:
+      - 4000
+      - 9229  
     ports:
-      - 4000:4000        
-    x-develop: 
-      watch:          
-        - path: src/
-          target: /app/src/
-          action: sync  
+      - 4000:4000
+      - 9229:9229
+    develop:
+      watch:
+        - path: /src
+          target: /app/src
+          action: sync
+          ignore:
+            - "node_modules/"
+            - "Jenkinsfile"
+            - "Jenkins.Dockerfile"
+            - "*.md"
+            - "*.dockerfile"

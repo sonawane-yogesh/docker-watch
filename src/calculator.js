@@ -13,5 +13,10 @@ module.exports = {
         return a * b;
     }, argoCheck: function (message) {
         return "Hello, from ArgoCD " + message;
+    }, watchCheck: function(){
+        return true;
     }
 };
+
+// yogesh sonawane
+// sonawane yogesh
