@@ -10,7 +10,7 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    dockerHome = tool 'docker-watch'
+                    dockerHome = tool 'Docker'
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
             }
