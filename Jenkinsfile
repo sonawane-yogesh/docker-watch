@@ -7,14 +7,14 @@ pipeline {
         CUSTOM_PATH = "/usr/bin:${env.PATH}"        
     }    
     stages {
-        /*stage('Initialize') {
+        stage('Initialize') {
             steps {
                 script {
                     dockerHome = tool 'docker-watch'
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
             }
-        }*/
+        }
         stage('Run npm install') {
             steps {
                 echo 'Running npm install command...'
