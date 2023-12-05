@@ -4,7 +4,8 @@ pipeline {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
-        CUSTOM_PATH = "/usr/bin:${env.PATH}"        
+        CUSTOM_PATH = "/usr/bin:${env.PATH}"  
+        DOCKET_HOST = "unix:///var/run/docker.sock"
     }    
     stages {
         stage('Run npm install') {
@@ -29,18 +30,20 @@ pipeline {
                 script {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
+                    /*
                     def dockerLoginCommand = "docker login -u sonawaneyogeshb --password-stdin"
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "(echo ${PASSWORD} | ${dockerLoginCommand})"
                     }
-                    /*
+                    */
+                    
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login -u ${USERNAME} --password-stdin"                        
                         sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
                         sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
                         sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
                     }
-                    */
+                   
                 }
             }
         } 
