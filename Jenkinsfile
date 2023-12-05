@@ -29,12 +29,18 @@ pipeline {
                 script {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
+                    def dockerLoginCommand = "docker login -u sonawaneyogeshb --password-stdin"
+                    withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "(echo ${PASSWORD} | ${dockerLoginCommand})"
+                    }
+                    /*
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login -u ${USERNAME} --password-stdin"                        
                         sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
                         sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
                         sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
                     }
+                    */
                 }
             }
         } 
