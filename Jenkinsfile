@@ -13,7 +13,8 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh './jenkins/push.sh'
+        sh 'sudo docker push sonawaneyogeshb/docker-watch:latest'           
+        echo 'Push Image Completed'
       }
     }
   }
