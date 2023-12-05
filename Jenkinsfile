@@ -24,13 +24,26 @@ pipeline {
                 // checkout scm
             }
         }
+        stage('Check Docker Login Only') {
+          steps {
+            script {
+                def dockerLoginCommand = "docker login -u sonawaneyogeshb --password-stdin"
+                withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                  sh "${dockerLoginCommand}".execute().in.with {
+                      it.write("${PASSWORD}\n".getBytes())
+                      it.flush()
+                  }
+                }
+            }
+          }
+        }
         stage('Docker Login and Push') {
             steps {
                 script {
                     def imageName = 'docker-watch'
                     def imageTag = env.BUILD_NUMBER
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login -u ${USERNAME} -p ${PASSWORD}"                        
+                        sh "docker login -u ${USERNAME} --password-stdin"                        
                         sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
                         sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
                         sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
