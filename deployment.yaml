@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: docker-watch-container
-          image: docker-watch:latest
+          image: sonawaneyogeshb/docker-watch:latest
           imagePullPolicy: IfNotPresent  # Set the image pull policy here
           ports:
             - containerPort: 8080
