@@ -23,6 +23,8 @@ pipeline {
                 echo 'Checkout'
             }
         }
+        /*
+        * working stage, but need to use -p password inline parameter like following stage...
         stage('Docker Login and Push') {
             steps {
                 script {
@@ -36,7 +38,8 @@ pipeline {
                     }                   
                 }
             }
-        } 
+        }
+        */ 
         stage('Docker Login and Push Other Try') {
             steps {
                 script {
