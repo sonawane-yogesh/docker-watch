@@ -11,7 +11,6 @@ pipeline {
         stage('Run npm install') {
             steps {
                 echo 'Running npm install command...'
-                // npm install
             }
         }
         stage('Run start command') {
@@ -22,28 +21,19 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checkout'
-                // checkout scm
             }
         }
         stage('Docker Login and Push') {
             steps {
                 script {
                     def imageName = 'docker-watch'
-                    def imageTag = env.BUILD_NUMBER
-                    /*
-                    def dockerLoginCommand = "docker login -u sonawaneyogeshb --password-stdin"
+                    def imageTag = env.BUILD_NUMBER                    
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "(echo ${PASSWORD} | ${dockerLoginCommand})"
-                    }
-                    */
-                    
-                    withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login -u ${USERNAME} -p ${PASSWORD}"                        
+                        sh "docker login -u ${USERNAME} --password-stdin"                        
                         sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
                         sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
                         sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
-                    }
-                   
+                    }                   
                 }
             }
         } 
@@ -51,16 +41,12 @@ pipeline {
             steps {
                 script {
                     def imageName = 'docker-watch'
-                    def imageTag = env.BUILD_NUMBER
+                    def imageTag = 'latest'; // env.BUILD_NUMBER 
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        // Use environment variables to pass credentials to the Docker command
                         withEnv(["DOCKER_USERNAME=${USERNAME}", "DOCKER_PASSWORD=${PASSWORD}"]) {
-                            // Docker login
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                            // Build and tag the Docker image
                             sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
                             sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                            // Push the Docker image
                             sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
                         }
                     }
