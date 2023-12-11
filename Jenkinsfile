@@ -3,66 +3,38 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
-        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        DOCKER_IMAGE_TAG = "1.${env.BUILD_NUMBER}.0"
         CUSTOM_PATH = "/usr/bin:${env.PATH}"  
         DOCKET_HOST = "unix:///var/run/docker.sock"
     }    
     stages {
-        stage('Run npm install') {
-            steps {
-                echo 'Running npm install command...'
-            }
-        }
-        stage('Run start command') {
-            steps {
-                echo 'Starting server application...'
-            }
-        }
-        stage('Checkout') {
-            steps {
-                echo 'Checkout'
-            }
-        }
-        /*
-        * working stage, but need to use -p password inline parameter like following stage...
-        stage('Docker Login and Push') {
+        stage('Run Tests') {
             steps {
                 script {
-                    def imageName = 'docker-watch'
-                    def imageTag = env.BUILD_NUMBER                    
-                    withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login -u ${USERNAME} --password-stdin"                        
-                        sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
-                        sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                        sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
-                    }                   
-                }
+                    try {
+                        echo 'starting executing tests...'
+                        sh "npm run test"
+                        echo 'completed executing tests...'
+                    } catch (Exception exception) {
+                        echo "Caught exception: ${exception.message}"
+                    }                    
+                }                
             }
-        }
-        */ 
-        stage('Docker Login and Push Other Try') {
+        }       
+        stage('Docker Login and Push latest image') {
             steps {
-                script {
-                    def imageName = 'docker-watch'
-                    def imageTag = 'latest'; // env.BUILD_NUMBER 
+                script {                    
                     withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         withEnv(["DOCKER_USERNAME=${USERNAME}", "DOCKER_PASSWORD=${PASSWORD}"]) {
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                            sh "docker build -t ${imageName}:${imageTag} -f Dockerfile ."
-                            sh "docker tag ${imageName}:${imageTag} sonawaneyogeshb/${imageName}:${imageTag}"
-                            sh "docker push sonawaneyogeshb/${imageName}:${imageTag}"
+                            sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} -f Dockerfile ."
+                            sh "docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}"
+                            sh "docker push ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}"
                         }
                     }
                 }
             }
-        }
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    echo 'Pushed docker image to hub.docker.com'
-                }
-            }
-        }        
+        }             
         stage('Kubernetes Deployment') {
             steps {
                 script {
@@ -71,5 +43,20 @@ pipeline {
                 }
             }
         }
+        /*
+        * working stage, but need to use -p password inline parameter
+        stage('Docker Login and Push') {
+            steps {
+                script {                                      
+                    withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login -u ${USERNAME} --password-stdin"                        
+                        sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} -f Dockerfile ."
+                        sh "docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}"
+                        sh "docker push ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}"
+                    }                   
+                }
+            }
+        }
+        */ 
     }
 }
