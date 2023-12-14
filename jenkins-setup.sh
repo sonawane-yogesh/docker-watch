@@ -1,3 +1,8 @@
+# To run this file
+# chmod +x jenkins-setup.sh
+# then
+# ./jenkins-setup.sh
+
 # To run docker within Jenkins, follow these steps
 docker network create jenkins
 

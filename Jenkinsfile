@@ -34,7 +34,8 @@ pipeline {
                     }
                 }
             }
-        }             
+        }   
+        /*          
         stage('Kubernetes Deployment') {
             steps {
                 script {
@@ -43,6 +44,7 @@ pipeline {
                 }
             }
         }
+        */
         /*
         * working stage, but need to use -p password inline parameter
         stage('Docker Login and Push') {
