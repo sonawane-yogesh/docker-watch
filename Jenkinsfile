@@ -20,8 +20,8 @@ pipeline {
                         echo 'complated npm install'
                         echo 'running executing tests...'
                         sh "npm run test"
-                        echo 'completed executing tests'
-                        def coverageDir = "${WORKSPACE}/coverage/lcov-report"
+                        echo 'completed executing tests'                        
+                        def coverageDir = "${JOB_URL}/${DOCKER_IMAGE_NAME}/htmlreports/coverage-reports"
                         if (fileExists(coverageDir)) {
                             dir(coverageDir) {
                                 publishHTML([
@@ -30,7 +30,7 @@ pipeline {
                                     keepAll: false,
                                     reportDir: '',
                                     reportFiles: 'index.html',
-                                    reportName: 'coverage-report',
+                                    reportName: 'coverage-reports',
                                     reportTitles: '',
                                     useWrapperFileDirectly: true
                                 ])
