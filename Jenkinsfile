@@ -15,15 +15,20 @@ pipeline {
             steps {
                 script {
                     try {
-                        echo 'starting executing tests...'
+                        echo 'running npm install...'
+                        sh 'npm install'
+                        echo 'complated npm install'
+                        echo 'running executing tests...'
                         sh "npm run test"
-                        echo 'completed executing tests...'
+                        echo 'completed executing tests'
                     } catch (Exception exception) {
                         echo "Caught exception: ${exception.message}"
                     }                    
                 }                
             }
-        }       
+        }
+        // commented out following stage for other stages to complete.
+        /*       
         stage('Docker Login and Push latest image') {
             steps {
                 script {                    
@@ -37,7 +42,8 @@ pipeline {
                     }
                 }
             }
-        }   
+        }
+        */   
         /*          
         stage('Kubernetes Deployment') {
             steps {
