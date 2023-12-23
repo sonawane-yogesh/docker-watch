@@ -21,12 +21,33 @@ pipeline {
                         echo 'running executing tests...'
                         sh "npm run test"
                         echo 'completed executing tests'
-                        echo 'publishing test coverage report'
-                        junit 'coverage/lcov-report/**'
                     } catch (Exception exception) {
                         echo "Caught exception: ${exception.message}"
                     }                    
                 }                
+            }
+        }
+        stage('Publish HTML Reports') {
+            steps {
+                script {
+                    def coverageDir = "${WORKSPACE}/coverage/lcov-report"
+                    if (fileExists(coverageDir)) {
+                        dir(coverageDir) {
+                            publishHTML([
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: false,
+                                reportDir: '',
+                                reportFiles: 'index.html',
+                                reportName: 'Code Coverage Report',
+                                reportTitles: '',
+                                useWrapperFileDirectly: true
+                            ])
+                        }
+                    } else {
+                        error("Coverage directory not found: ${coverageDir}")
+                    }
+                }
             }
         }
         // commented out following stage for other stages to complete.
