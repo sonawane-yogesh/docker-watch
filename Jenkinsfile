@@ -20,8 +20,8 @@ pipeline {
                         echo 'complated npm install'
                         echo 'running executing tests...'
                         sh "npm run test"
-                        echo 'completed executing tests'                        
-                        def coverageDir = "${JOB_URL}/htmlreports/coverage-reports"
+                        echo 'completed executing tests'
+                        def coverageDir = "${WORKSPACE}/coverage/lcov-report"
                         if (fileExists(coverageDir)) {
                             dir(coverageDir) {
                                 publishHTML([
@@ -30,7 +30,7 @@ pipeline {
                                     keepAll: false,
                                     reportDir: '',
                                     reportFiles: 'index.html',
-                                    reportName: 'coverage-reports',
+                                    reportName: 'HTML Report',
                                     reportTitles: '',
                                     useWrapperFileDirectly: true
                                 ])
@@ -47,7 +47,7 @@ pipeline {
         stage('Publish HTML Reports') {
             steps {
                 script {
-                    def coverageDir = "${WORKSPACE}/coverage/lcov-report"
+                    def coverageDir = "${JOB_URL}htmlreports/coverage-report"
                     if (fileExists(coverageDir)) {
                         dir(coverageDir) {
                             publishHTML([
@@ -56,7 +56,7 @@ pipeline {
                                 keepAll: false,
                                 reportDir: '',
                                 reportFiles: 'index.html',
-                                reportName: 'Code Coverage Report',
+                                reportName: 'coverage-report',
                                 reportTitles: '',
                                 useWrapperFileDirectly: true
                             ])
