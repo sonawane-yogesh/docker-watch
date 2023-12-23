@@ -3,3 +3,5 @@ package-lock.json
 docker-watch
 certificate.pfx
 https.key
+.nyc_output
+coverage

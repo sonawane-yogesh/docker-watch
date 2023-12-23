@@ -27,3 +27,5 @@ app.listen(port, function () {
     console.log(JSON.stringify(address));
     console.log('=======================================================================');
 });
+
+module.exports = app;
