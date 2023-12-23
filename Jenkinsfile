@@ -30,7 +30,7 @@ pipeline {
                                     keepAll: false,
                                     reportDir: '',
                                     reportFiles: 'index.html',
-                                    reportName: 'HTML Report',
+                                    reportName: 'coverage-report',
                                     reportTitles: '',
                                     useWrapperFileDirectly: true
                                 ])
