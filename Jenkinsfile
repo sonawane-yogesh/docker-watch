@@ -21,6 +21,8 @@ pipeline {
                         echo 'running executing tests...'
                         sh "npm run test"
                         echo 'completed executing tests'
+                        echo 'publishing test coverage report'
+                        junit 'coverage/lcov-report/**'
                     } catch (Exception exception) {
                         echo "Caught exception: ${exception.message}"
                     }                    
