@@ -17,6 +17,10 @@ app.get("/subtract", function (request, response) {
     let subtract = maths.subtract(6, 9);
     response.status(200).json({ data: subtract }).end();
 });
+app.get("/multiply", function (request, response) {
+    let subtract = maths.multiply(6, 9);
+    response.status(200).json({ data: subtract }).end();
+});
 
 let port = 4000;
 app.listen(port, function () {

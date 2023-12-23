@@ -30,4 +30,13 @@ describe('Hello API Request', () => {
             return done(err);
         });
     });
+    it('should return response on call', (done) => {
+        supertest(app).get('/multiply').then(res => {
+            expect(res.body.data).to.be.equal(54);
+            expect(200);
+            return done();
+        }).catch((err) => {
+            return done(err);
+        });
+    });
 });
