@@ -44,6 +44,41 @@ pipeline {
                 }                
             }
         }
+        stage('Publish Code Coverage') {
+            steps {
+                script {
+                    def coverageDir = "${WORKSPACE}/coverage/lcov-report"
+                    if (fileExists(coverageDir)) {
+                        dir(coverageDir) {
+                            step([$class: 'CoberturaPublisher',
+                                  coberturaReportFile: 'lcov.info',
+                                  onlyStable: false,
+                                  failUnhealthy: false,
+                                  failUnstable: false,
+                                  maxNumberOfBuilds: 0,
+                                  lineCoverageTargets: '80, 80, 80',
+                                  conditionalCoverageTargets: '80, 80, 80',
+                                  classCoverageTargets: '80, 80, 80',
+                                  fileCoverageTargets: '80, 80, 80',
+                            ])
+
+                            publishHTML([
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: false,
+                                reportDir: '',
+                                reportFiles: 'index.html',
+                                reportName: 'coverage-report',
+                                reportTitles: '',
+                                useWrapperFileDirectly: true
+                            ])
+                        }
+                    } else {
+                        error("Coverage directory not found: ${coverageDir}")
+                    }
+                }
+            }
+        }
         stage('Publish HTML Reports') {
             steps {
                 script {
