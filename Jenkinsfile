@@ -21,7 +21,7 @@ pipeline {
                         echo 'running executing tests...'
                         sh "npm run test"
                         echo 'completed executing tests'                        
-                        def coverageDir = "${JOB_URL}/${DOCKER_IMAGE_NAME}/htmlreports/coverage-reports"
+                        def coverageDir = "${JOB_URL}/htmlreports/coverage-reports"
                         if (fileExists(coverageDir)) {
                             dir(coverageDir) {
                                 publishHTML([
