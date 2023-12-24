@@ -20,8 +20,8 @@ pipeline {
                         echo 'complated npm install'
                         echo 'running executing tests...'
                         sh "npm run test"
-                        echo 'completed executing tests'
-                        def coverageDir = "${WORKSPACE}/coverage/lcov-report"
+                        echo 'completed executing tests'                        
+                        def coverageDir = "${JOB_URL}/htmlreports/coverage-reports"
                         if (fileExists(coverageDir)) {
                             dir(coverageDir) {
                                 publishHTML([
@@ -30,76 +30,20 @@ pipeline {
                                     keepAll: false,
                                     reportDir: '',
                                     reportFiles: 'index.html',
-                                    reportName: 'coverage-report',
+                                    reportName: 'coverage-reports',
                                     reportTitles: '',
                                     useWrapperFileDirectly: true
                                 ])
                             }
                         } else {
+                            echo "in else block of coverage report"
                             error("Coverage directory not found: ${coverageDir}")
                         }
                     } catch (Exception exception) {
+                        echo "in catch block"
                         echo "Caught exception: ${exception.message}"
                     }                    
                 }                
-            }
-        }
-        stage('Publish Code Coverage') {
-            steps {
-                script {
-                    def coverageDir = "${WORKSPACE}/coverage/lcov-report"
-                    if (fileExists(coverageDir)) {
-                        dir(coverageDir) {
-                            step([$class: 'CoberturaPublisher',
-                                  coberturaReportFile: 'lcov.info',
-                                  onlyStable: false,
-                                  failUnhealthy: false,
-                                  failUnstable: false,
-                                  maxNumberOfBuilds: 0,
-                                  lineCoverageTargets: '80, 80, 80',
-                                  conditionalCoverageTargets: '80, 80, 80',
-                                  classCoverageTargets: '80, 80, 80',
-                                  fileCoverageTargets: '80, 80, 80',
-                            ])
-
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: false,
-                                keepAll: false,
-                                reportDir: '',
-                                reportFiles: 'index.html',
-                                reportName: 'coverage-report',
-                                reportTitles: '',
-                                useWrapperFileDirectly: true
-                            ])
-                        }
-                    } else {
-                        error("Coverage directory not found: ${coverageDir}")
-                    }
-                }
-            }
-        }
-        stage('Publish HTML Reports') {
-            steps {
-                script {
-                    def coverageDir = "${JOB_URL}htmlreports/coverage-report"
-                    if (fileExists(coverageDir)) {
-                        dir(coverageDir) {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: false,
-                                keepAll: false,
-                                reportDir: '',
-                                reportFiles: 'index.html',
-                                reportName: 'coverage-report',
-                                reportTitles: '',
-                                useWrapperFileDirectly: true
-                            ])
-                        }
-                    } else {
-                        error("Coverage directory not found: ${coverageDir}")
-                    }
-                }
             }
         }
         // commented out following stage for other stages to complete.
