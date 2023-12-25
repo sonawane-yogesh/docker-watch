@@ -7,7 +7,7 @@ pipeline {
         CUSTOM_PATH = "/usr/bin:${env.PATH}"  
         DOCKET_HOST = "unix:///var/run/docker.sock"
     }    
-    stages {
+    stages {        
         stage('Run Tests') {
             agent {
                 docker { image 'node:16-alpine' }
@@ -46,8 +46,21 @@ pipeline {
                 }                
             }
         }
-        // commented out following stage for other stages to complete.
-        /*       
+        
+        /*        
+        stage('Deploy Helm Chart') {
+            agent {
+                docker { image 'alpine/k8s' }
+            }
+            steps {
+                script {
+                    sh 'helm --help'
+                    // sh "helm upgrade --install my-release ${HELM_CHART_PATH}"
+                }
+            }
+        }
+        */
+        // commented out following stage for other stages to complete.              
         stage('Docker Login and Push latest image') {
             steps {
                 script {                    
@@ -61,14 +74,24 @@ pipeline {
                     }
                 }
             }
-        }
-        */   
+        }          
         /*          
         stage('Kubernetes Deployment') {
             steps {
                 script {
                     echo 'Deploying to local Kubernetes...' 
                     sh "kubectl apply -f ./deployment/deployment.yaml"
+                }
+            }
+        }
+        */
+        /*
+        stage('Deploy to Minikube') {
+            steps {
+                script {
+                    sh 'minikube docker-env --shell bash'
+                    sh 'eval $(minikube docker-env)'
+                    sh 'kubectl apply -f ./deployment/deployment.yaml'
                 }
             }
         }
