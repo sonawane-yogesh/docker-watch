@@ -48,10 +48,7 @@ pipeline {
                 
         stage('Deploy Helm Chart') {
             agent {
-                kubernetes {
-                    cloud 'kubernetes'
-                    label 'helm-pod'
-                }
+                docker { image 'alpine/helm:3.13.3' }
             }
             steps {
                 script {
