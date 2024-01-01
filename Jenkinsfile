@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    docker { label 'docker' }
     environment {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
