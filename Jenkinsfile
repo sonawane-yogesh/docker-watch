@@ -1,5 +1,5 @@
 pipeline {
-    docker { label 'docker' }
+    agent any
     environment {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
@@ -10,7 +10,8 @@ pipeline {
     stages {        
         stage('Run Tests') {
             agent {
-                docker { image 'node:16-alpine' }
+                docker { label 'docker' }
+                // docker { image 'node:16-alpine' }
             }
             steps {
                 script {
