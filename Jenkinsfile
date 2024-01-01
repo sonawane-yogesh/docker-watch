@@ -48,7 +48,7 @@ pipeline {
                 
         stage('Deploy Helm Chart') {
             agent {
-                docker { image 'alpine/helm:3.13.3' }
+                docker { image 'alpine/k8s:1.25.16' }
             }
             steps {
                 script {
@@ -73,17 +73,7 @@ pipeline {
                     }
                 }
             }
-        }          
-        /*          
-        stage('Kubernetes Deployment') {
-            steps {
-                script {
-                    echo 'Deploying to local Kubernetes...' 
-                    sh "kubectl apply -f ./deployment/deployment.yaml"
-                }
-            }
-        }
-        */
+        }  
         /*
         stage('Deploy to Minikube') {
             steps {
@@ -91,21 +81,6 @@ pipeline {
                     sh 'minikube docker-env --shell bash'
                     sh 'eval $(minikube docker-env)'
                     sh 'kubectl apply -f ./deployment/deployment.yaml'
-                }
-            }
-        }
-        */
-        /*
-        * working stage, but need to use -p password inline parameter
-        stage('Docker Login and Push') {
-            steps {
-                script {                                      
-                    withCredentials([usernamePassword(credentialsId: 'docker-private-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login -u ${USERNAME} --password-stdin"                        
-                        sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} -f Dockerfile ."
-                        sh "docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}"
-                        sh "docker push ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}"
-                    }                   
                 }
             }
         }
