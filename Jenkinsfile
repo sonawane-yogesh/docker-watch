@@ -5,7 +5,6 @@ pipeline {
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_IMAGE_TAG = "1.${env.BUILD_NUMBER}.0"
         CUSTOM_PATH = "/usr/bin:${env.PATH}"  
-        // DOCKET_HOST = "unix:///var/run/docker.sock"
     }    
     stages {        
         stage('Run Tests') {
@@ -45,9 +44,8 @@ pipeline {
                     }                    
                 }                
             }
-        }
-        
-        /*        
+        }        
+                
         stage('Deploy Helm Chart') {
             agent {
                 docker { image 'alpine/k8s' }
@@ -59,7 +57,7 @@ pipeline {
                 }
             }
         }
-        */
+        
         // commented out following stage for other stages to complete.              
         stage('Docker Login and Push latest image') {
             steps {
