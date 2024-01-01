@@ -5,13 +5,12 @@ pipeline {
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_IMAGE_TAG = "1.${env.BUILD_NUMBER}.0"
         CUSTOM_PATH = "/usr/bin:${env.PATH}"  
-        DOCKET_HOST = "unix:///var/run/docker.sock"
+        // DOCKET_HOST = "unix:///var/run/docker.sock"
     }    
     stages {        
         stage('Run Tests') {
             agent {
-                docker { label 'docker' }
-                // docker { image 'node:16-alpine' }
+                docker { image 'node:16-alpine' }
             }
             steps {
                 script {
