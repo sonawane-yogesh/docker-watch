@@ -48,7 +48,7 @@ pipeline {
                 
         stage('Deploy Helm Chart') {
             agent {
-                docker { image 'alpine/k8s' }
+                docker { image 'alpine/helm:latest' }
             }
             steps {
                 script {
@@ -58,7 +58,8 @@ pipeline {
             }
         }
         
-        // commented out following stage for other stages to complete.              
+        // commented out following stage for other stages to complete.
+        // dckr_pat_Rk2AYAgva9WOtlcGnnsz-1wBNC0
         stage('Docker Login and Push latest image') {
             steps {
                 script {                    
