@@ -79,7 +79,7 @@ pipeline {
                         git config --local user.email sonawaneyogeshb@gmail.com
                         git config user.name "yogeshs"
                         git commit -m "Updated deployment.yaml"
-                        git push            
+                        git push https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                     """
                 }
             }
