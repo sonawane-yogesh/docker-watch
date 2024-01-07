@@ -74,11 +74,8 @@ pipeline {
                         git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                         cd docker-watch-helm
                         sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
-                        git add .
-                        git config user.email "sonawaneyogeshb@gmail.com"
-                        git config --local user.email sonawaneyogeshb@gmail.com
-                        git config user.name "yogeshs"
-                        git commit -m "Updated deployment.yaml"
+                        git add .                        
+                        git commit -m "updated deployment.yaml"
                         git push https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                     """
                 }
