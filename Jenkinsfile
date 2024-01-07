@@ -71,9 +71,9 @@ pipeline {
                         mkdir __temp
                         cd ./__temp
                         ls
-                        git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
+                        git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                         cd docker-watch-helm
-                        sed -i \'s|^ *image:.*|image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
+                        sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
                         git add .
                         git config --global user.email "sonawaneyogeshb@gmail.com"
                         git config --global user.name "sonawaneyogeshb@gmail.com"
