@@ -76,7 +76,7 @@ pipeline {
                             cd docker-watch-helm
                             sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
                             git add .
-                            git config user.email ${USERNAME}"
+                            git config user.email ${USERNAME}
                             git config user.name "yogeshs"
                             git commit -m "updated deployment.yaml"
                             git push
