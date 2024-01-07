@@ -71,7 +71,7 @@ pipeline {
                         mkdir __temp
                         cd ./__temp
                         ls
-                        git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
+                        git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                         cd docker-watch-helm
                         sed -i \'s|^ *image:.*|image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
                         git add .
