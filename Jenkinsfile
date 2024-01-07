@@ -44,22 +44,8 @@ pipeline {
                     }                    
                 }                
             }
-        }        
-                
-        stage('Deploy Helm Chart') {
-            agent {
-                docker { image 'alpine/k8s:1.25.16' }
-            }
-            steps {
-                script {
-                    sh 'helm --help'
-                    // sh "helm upgrade --install my-release ${HELM_CHART_PATH}"
-                }
-            }
-        }
-        
+        } 
         // commented out following stage for other stages to complete.
-        // dckr_pat_Rk2AYAgva9WOtlcGnnsz-1wBNC0
         stage('Docker Login and Push latest image') {
             steps {
                 script {                    
@@ -73,17 +59,31 @@ pipeline {
                     }
                 }
             }
-        }  
-        /*
-        stage('Deploy to Minikube') {
+        }        
+        stage('Update Helm Chart Repository') {
+            agent {
+                docker { image 'alpine/k8s:1.25.16' }
+            }
             steps {
-                script {
-                    sh 'minikube docker-env --shell bash'
-                    sh 'eval $(minikube docker-env)'
-                    sh 'kubectl apply -f ./deployment/deployment.yaml'
+                script {                    
+                    sh script:"""
+                        rm -rf __temp
+                        mkdir __temp
+                        echo "This is start $(pwd)"
+                        cd ./__temp
+                        echo "This is $(pwd)"
+                        ls
+                        git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
+                        cd docker-watch-helm
+                        sed -i \'s|^ *image:.*|image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
+                        git add .
+                        git config --global user.email "sonawaneyogeshb@gmail.com"
+                        git config --global user.name "sonawaneyogeshb@gmail.com"
+                        git commit -m "Updated deployment.yaml"
+                        git push            
+                    """
                 }
             }
         }
-        */ 
     }
 }
