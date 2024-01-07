@@ -69,9 +69,7 @@ pipeline {
                     sh script:"""
                         rm -rf __temp
                         mkdir __temp
-                        echo "This is start $(pwd)"
                         cd ./__temp
-                        echo "This is $(pwd)"
                         ls
                         git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                         cd docker-watch-helm
