@@ -76,10 +76,10 @@ pipeline {
                             cd docker-watch-helm
                             sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
                             git add .
-                            git config user.email ${USERNAME}
-                            git config user.name sonawane-yogesh
-                            git commit -m "updated deployment.yaml"
-                            git push https://sonawane-yogesh:${PASSWORD}@github.com/sonawane-yogesh/docker-watch-helm.git
+                            git config --global user.email "sonawaneyogeshb@gmail.com"
+                            git config --global user.name "sonawaneyogeshb@gmail.com"
+                            git commit -m "jenkins-test-from pipeline -- updated deployment.yaml"
+                            git push
                         """
                     }    
                 }
