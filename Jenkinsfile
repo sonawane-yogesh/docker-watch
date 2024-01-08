@@ -5,6 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_IMAGE_TAG = "1.${env.BUILD_NUMBER}.0"
         GIT_HELM_REPO = "docker-watch-helm"
+        GIT_EMAIL = "${GIT_EMAIL}"
     }    
     stages {        
         stage("Run Tests") {
@@ -45,7 +46,6 @@ pipeline {
                 }                
             }
         } 
-        // commented out following stage for other stages to complete.
         stage("Docker Login and Push latest image") {
             steps {
                 script {                    
@@ -76,7 +76,7 @@ pipeline {
                 dir("__temp") {
                     withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]){
                         withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
-                            sh("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/sonawane-yogesh/${GIT_HELM_REPO}.git")
+                            sh("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
                             sh("cd ${GIT_HELM_REPO}")
                         }
                     }
@@ -96,8 +96,8 @@ pipeline {
             steps {
                 dir("__temp/${GIT_HELM_REPO}") {
                     sh "git add ."
-                    sh "git config --global user.email sonawaneyogeshb@gmail.com"
-                    sh "git config --global user.name sonawaneyogeshb@gmail.com"
+                    sh "git config --global user.email ${GIT_EMAIL}"
+                    sh "git config --global user.name ${GIT_EMAIL}"
                     sh "git commit -m changed-image-tag--${DOCKER_IMAGE_TAG}--via-pipeline"
                 }
             }
