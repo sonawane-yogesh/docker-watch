@@ -66,13 +66,13 @@ pipeline {
             }
             steps {
                 script { 
-                    withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {                   
+                    // withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {                   
                         sh script:"""
                             rm -rf __temp
                             mkdir __temp
                             cd ./__temp
                             ls
-                            git clone https://sonawane-yogesh:${PASSWORD}@github.com/sonawane-yogesh/docker-watch-helm.git
+                            git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
                             cd docker-watch-helm
                             sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
                             git add .
@@ -81,7 +81,7 @@ pipeline {
                             git commit -m "jenkins-test-from pipeline -- updated deployment.yaml"
                             git push
                         """
-                    }    
+                    // }    
                 }
             }
         }
