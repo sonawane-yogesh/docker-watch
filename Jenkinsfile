@@ -62,38 +62,57 @@ pipeline {
         } 
         stage('Prepare Workspace') {
             steps {
-                sh 'rm -rf __temp'
-                sh 'mkdir __temp'
-                sh 'cd ./__temp'
-                sh 'ls'
+                script {
+                   sh 'rm -rf __temp'
+                    dir('__temp') {
+                        sh 'ls'
+                    }
+                }
             }
         }
 
         stage('Clone Repository') {
             steps {
-                sh 'git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git'
-                sh 'cd docker-watch-helm'
+                dir('__temp') {
+                    withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                        withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
+                            sh("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/sonawane-yogesh/docker-watch-helm.git")
+                        }
+                    }
+                    sh 'cd docker-watch-helm'
+                    sh "ls"
+                }
             }
         }
-
+        
         stage('Modify Deployment.yaml') {
             steps {
-                sh 'sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml'
+                dir('__temp/docker-watch-helm') {
+                    sh 'sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml'
+                }
             }
         }
-
+        
         stage('Commit Changes') {
             steps {
-                sh 'git add .'
-                sh 'git config --global user.email "sonawaneyogeshb@gmail.com"'
-                sh 'git config --global user.name "sonawaneyogeshb@gmail.com"'
-                sh 'git commit -m "jenkins-test-from pipeline -- updated deployment.yaml"'
+                dir('__temp/docker-watch-helm') {
+                    sh 'git add .'
+                    sh 'git config --global user.email "sonawaneyogeshb@gmail.com"'
+                    sh 'git config --global user.name "sonawaneyogeshb@gmail.com"'
+                    sh 'git commit -m "jenkins-test-from pipeline -- updated deployment.yaml -- via pipeline"'
+                }
             }
         }
-
+        
         stage('Push Changes') {
             steps {
-                sh 'git push'
+                dir('__temp/docker-watch-helm') {
+                   withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                        withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
+                            sh("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/sonawane-yogesh/docker-watch-helm.git")
+                        }
+                    }
+                }
             }
         }
     }
