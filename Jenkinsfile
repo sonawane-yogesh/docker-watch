@@ -88,7 +88,7 @@ pipeline {
         stage('Modify Deployment.yaml') {
             steps {
                 dir('__temp/docker-watch-helm') {
-                    sh 'sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml'
+                    sh("sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml")
                 }
             }
         }
