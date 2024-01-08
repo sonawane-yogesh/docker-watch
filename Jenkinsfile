@@ -59,30 +59,41 @@ pipeline {
                     }
                 }
             }
-        }        
-        stage('Update Helm Chart Repository') {
-            agent {
-                docker { image 'alpine/k8s:1.25.16' }
-            }
+        } 
+        stage('Prepare Workspace') {
             steps {
-                script { 
-                    // withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {                   
-                        sh script:"""
-                            rm -rf __temp
-                            mkdir __temp
-                            cd ./__temp
-                            ls
-                            git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git
-                            cd docker-watch-helm
-                            sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml
-                            git add .
-                            git config --global user.email "sonawaneyogeshb@gmail.com"
-                            git config --global user.name "sonawaneyogeshb@gmail.com"
-                            git commit -m "jenkins-test-from pipeline -- updated deployment.yaml"
-                            git push
-                        """
-                    // }    
-                }
+                sh 'rm -rf __temp'
+                sh 'mkdir __temp'
+                sh 'cd ./__temp'
+                sh 'ls'
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                sh 'git clone https://sonawane-yogesh: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@github.com/sonawane-yogesh/docker-watch-helm.git'
+                sh 'cd docker-watch-helm'
+            }
+        }
+
+        stage('Modify Deployment.yaml') {
+            steps {
+                sh 'sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml'
+            }
+        }
+
+        stage('Commit Changes') {
+            steps {
+                sh 'git add .'
+                sh 'git config --global user.email "sonawaneyogeshb@gmail.com"'
+                sh 'git config --global user.name "sonawaneyogeshb@gmail.com"'
+                sh 'git commit -m "jenkins-test-from pipeline -- updated deployment.yaml"'
+            }
+        }
+
+        stage('Push Changes') {
+            steps {
+                sh 'git push'
             }
         }
     }
