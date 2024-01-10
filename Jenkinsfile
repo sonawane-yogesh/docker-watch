@@ -6,6 +6,7 @@ pipeline {
         DOCKER_IMAGE_TAG = "1.${env.BUILD_NUMBER}.0"
         GIT_HELM_REPO = "docker-watch-helm"
         GIT_EMAIL = "${GIT_EMAIL}"
+        KUBECONFIG = "/home/lablink/.kube/config"
     }    
     stages {        
         stage("Run Tests") {
