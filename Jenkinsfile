@@ -108,30 +108,18 @@ pipeline {
                 }
             }
         }
-
-        stage('Lint Helm Chart') {
+        // TODO: working on following stage to get it work
+        /*
+        stage("Install Helm Chart") {
             steps {
                 dir("__temp/${GIT_HELM_REPO}") {
-                    sh ('helm lint .')
+                    sh ("helm lint .")
+                    sh ("helm template .")
+                    sh ("helm install --dry-run ${DOCKER_IMAGE_NAME} ./")
+                    sh ("helm install ${DOCKER_IMAGE_NAME} ./")
                 }
             }
         }
-
-        stage('Template Helm Chart') {
-            steps {
-                dir("__temp/${GIT_HELM_REPO}") {
-                    sh ('helm template .')
-                }
-            }
-        }
-
-        stage('Install Helm Chart') {
-            steps {
-                dir("__temp/${GIT_HELM_REPO}") {
-                    sh ('helm install --dry-run docker-watch ./')
-                    sh ('helm install docker-watch ./')
-                }
-            }
-        }
+        */
     }
 }
