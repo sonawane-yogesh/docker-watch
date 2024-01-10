@@ -76,8 +76,8 @@ pipeline {
                 dir("__temp") {
                     withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
                         withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
-                            sh("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
-                            sh("cd ${GIT_HELM_REPO}")
+                            sh ("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
+                            sh ("cd ${GIT_HELM_REPO}")
                         }
                     }
                 }
@@ -87,7 +87,7 @@ pipeline {
         stage("Modify Deployment.yaml") {
             steps {
                 dir("__temp/${GIT_HELM_REPO}") {
-                    sh("sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml")
+                    sh ("sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml")
                 }
             }
         }
@@ -101,7 +101,7 @@ pipeline {
                             sh "git config --global user.email ${GIT_EMAIL}"
                             sh "git config --global user.name ${GIT_EMAIL}"
                             sh "git commit -m changed-image-tag--${DOCKER_IMAGE_TAG}--via-pipeline"
-                            sh("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
+                            sh ("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
                         }
                     }    
                 }
@@ -110,25 +110,25 @@ pipeline {
 
         stage('Lint Helm Chart') {
             steps {
-                script {
-                    sh 'helm lint .'
+                dir("__temp/${GIT_HELM_REPO}") {
+                    sh ('helm lint .')
                 }
             }
         }
 
         stage('Template Helm Chart') {
             steps {
-                script {
-                    sh 'helm template .'
+                dir("__temp/${GIT_HELM_REPO}") {
+                    sh ('helm template .')
                 }
             }
         }
 
         stage('Install Helm Chart') {
             steps {
-                script {
-                    sh 'helm install --dry-run docker-watch ./'
-                    sh 'helm install docker-watch ./'
+                dir("__temp/${GIT_HELM_REPO}") {
+                    sh ('helm install --dry-run docker-watch ./')
+                    sh ('helm install docker-watch ./')
                 }
             }
         }
