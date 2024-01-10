@@ -74,7 +74,7 @@ pipeline {
         stage("Clone Repository") {
             steps {
                 dir("__temp") {
-                    withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]){
+                    withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
                         withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
                             sh("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
                             sh("cd ${GIT_HELM_REPO}")
@@ -95,22 +95,40 @@ pipeline {
         stage("Commit Changes") {
             steps {
                 dir("__temp/${GIT_HELM_REPO}") {
-                    sh "git add ."
-                    sh "git config --global user.email ${GIT_EMAIL}"
-                    sh "git config --global user.name ${GIT_EMAIL}"
-                    sh "git commit -m changed-image-tag--${DOCKER_IMAGE_TAG}--via-pipeline"
+                    withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
+                        withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
+                            sh "git add ."
+                            sh "git config --global user.email ${GIT_EMAIL}"
+                            sh "git config --global user.name ${GIT_EMAIL}"
+                            sh "git commit -m changed-image-tag--${DOCKER_IMAGE_TAG}--via-pipeline"
+                            sh("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
+                        }
+                    }    
                 }
             }
         }
-        
-        stage("Push Changes") {
+
+        stage('Lint Helm Chart') {
             steps {
-                dir("__temp/${GIT_HELM_REPO}") {
-                   withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]){
-                        withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
-                            sh("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
-                        }
-                    }
+                script {
+                    sh 'helm lint .'
+                }
+            }
+        }
+
+        stage('Template Helm Chart') {
+            steps {
+                script {
+                    sh 'helm template .'
+                }
+            }
+        }
+
+        stage('Install Helm Chart') {
+            steps {
+                script {
+                    sh 'helm install --dry-run docker-watch ./'
+                    sh 'helm install docker-watch ./'
                 }
             }
         }
