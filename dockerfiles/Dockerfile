@@ -3,7 +3,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY . ./
 RUN npm install
-EXPOSE 8080
+# EXPOSE 8080
 ENV NODE_ENV=production
 WORKDIR /app
 COPY . ./
