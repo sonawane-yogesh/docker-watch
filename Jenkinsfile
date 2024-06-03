@@ -44,22 +44,8 @@ pipeline {
                     }                    
                 }                
             }
-        }        
-                
-        stage('Deploy Helm Chart') {
-            agent {
-                docker { image 'alpine/k8s:1.25.16' }
-            }
-            steps {
-                script {
-                    sh 'helm --help'
-                    // sh "helm upgrade --install my-release ${HELM_CHART_PATH}"
-                }
-            }
-        }
-        
+        } 
         // commented out following stage for other stages to complete.
-        // dckr_pat_Rk2AYAgva9WOtlcGnnsz-1wBNC0
         stage('Docker Login and Push latest image') {
             steps {
                 script {                    
@@ -73,17 +59,61 @@ pipeline {
                     }
                 }
             }
-        }  
-        /*
-        stage('Deploy to Minikube') {
+        } 
+        stage('Prepare Workspace') {
             steps {
                 script {
-                    sh 'minikube docker-env --shell bash'
-                    sh 'eval $(minikube docker-env)'
-                    sh 'kubectl apply -f ./deployment/deployment.yaml'
+                   sh 'rm -rf __temp'
+                    dir('__temp') {
+                        sh 'ls'
+                    }
                 }
             }
         }
-        */ 
+
+        stage('Clone Repository') {
+            steps {
+                dir('__temp') {
+                    withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                        withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
+                            sh("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/sonawane-yogesh/docker-watch-helm.git")
+                        }
+                    }
+                    sh 'cd docker-watch-helm'
+                    sh "ls"
+                }
+            }
+        }
+        
+        stage('Modify Deployment.yaml') {
+            steps {
+                dir('__temp/docker-watch-helm') {
+                    sh("sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml")
+                }
+            }
+        }
+        
+        stage('Commit Changes') {
+            steps {
+                dir('__temp/docker-watch-helm') {
+                    sh 'git add .'
+                    sh 'git config --global user.email "sonawaneyogeshb@gmail.com"'
+                    sh 'git config --global user.name "sonawaneyogeshb@gmail.com"'
+                    sh 'git commit -m "jenkins-test-from pipeline -- updated deployment.yaml -- via pipeline"'
+                }
+            }
+        }
+        
+        stage('Push Changes') {
+            steps {
+                dir('__temp/docker-watch-helm') {
+                   withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                        withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
+                            sh("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/sonawane-yogesh/docker-watch-helm.git")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
