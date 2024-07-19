@@ -3,10 +3,12 @@ const app = express();
 const maths = require("./calculator");
 const chalk = require("chalk");
 const cors = require("cors");
-const http2 = require("http2");
 const dotenv = require("dotenv");
+/*
+const http2 = require("http2");
 const { join, resolve } = require("path");
 const { readFileSync } = require("fs");
+*/
 dotenv.config();
 
 app.use(cors());
@@ -17,14 +19,18 @@ app.use((request, response, next) => {
     next();
 });
 
-app.get("/", function (request, response, next) {
+app.get("/", function (request, response) {
     response.status(200).json({ message: "App is up and running!!!" }).end();
 });
-app.get("/add/:a/:b", function (request, response) {
-    const a = parseInt(request.params.a);
-    const b = parseInt(request.params.b);
-    const sum = maths.add(a, b);
-    response.status(200).json({ data: sum }).end();
+app.get("/calc/add/:a/:b", function (request, response) {
+    try {
+        const a = parseInt(request.params.a);
+        const b = parseInt(request.params.b);
+        const sum = maths.add(a, b);
+        response.status(200).json({ data: sum }).end();
+    } catch (error) {
+        response.status(500).json(error).end();
+    }    
 });
 app.get("/subtract/:a/:b", function (request, response) {
     const a = parseInt(request.params.a);
@@ -44,16 +50,23 @@ app.get("/divide/:a/:b", function (request, response) {
     const divide = maths.divide(a, b);
     response.status(200).json({ data: divide }).end();
 });
-const crtPath = resolve(__dirname, "../", 'certificates');
-const http2Server = http2.createSecureServer({
+/*
+const crtPath = resolve(join(__dirname, "..", 'certificates'));
+console.log(crtPath);
+const httpOptions = {
     cert: readFileSync(join(crtPath, 'device.crt')),
     key: readFileSync(join(crtPath, 'device.key')),
     allowHTTP1: true,
     ALPNProtocols: ["h2"]
+};
+const http2Server = http2.createSecureServer(httpOptions, app);
+*/
+process.on("uncaughtException", (err) => {
+    console.log(err); 
+});
 
-}, app);
-const port = process.env.PORT;
-http2Server.listen(port, function () {
+const port = parseInt(process.env.PORT, 10);
+app.listen(port, function () {
     var address = this.address();
     var dt = new Date().toLocaleString("en-us")
     console.log('=======================================================================');
