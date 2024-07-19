@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "bridge-to-kubernetes.resource",
+			"type": "bridge-to-kubernetes.resource",
+			"resource": "calculator-75bfddb4d4",
+			"resourceType": "pod",
+			"ports": [
+				9229,
+				3800
+			],
+			"targetCluster": "minikube",
+			"targetNamespace": "default",
+			"useKubernetesServiceEnvironmentVariables": false,
+			"targetContainer": "calculator"
+		}
+	]
+}

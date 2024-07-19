@@ -19,6 +19,3 @@ module.exports = {
         return true;
     }
 };
-
-// yogesh sonawane
-// sonawane yogesh
