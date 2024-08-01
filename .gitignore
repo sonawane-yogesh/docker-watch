@@ -6,3 +6,4 @@ https.key
 .nyc_output
 coverage
 backup-jenkinsfile
+.env

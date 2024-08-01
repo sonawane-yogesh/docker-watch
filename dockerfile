@@ -4,6 +4,7 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY . .
 RUN npm install
-EXPOSE 4000
+ENV PORT=8000
+EXPOSE 8000
 EXPOSE 9229
 CMD ["npm", "start"]

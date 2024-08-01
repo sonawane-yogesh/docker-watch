@@ -50,6 +50,9 @@ app.get("/divide/:a/:b", function (request, response) {
     const divide = maths.divide(a, b);
     response.status(200).json({ data: divide }).end();
 });
+app.get("/pipeline-test", function (request, response) {
+    response.status(200).json({ message: 'App is up and running!' }).end();
+});
 /*
 const crtPath = resolve(join(__dirname, "..", 'certificates'));
 console.log(crtPath);
