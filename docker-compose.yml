@@ -4,7 +4,7 @@ services:
     image: docker-watch
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./dockerfile
     expose:
       - 4000
       - 9229  

@@ -2,14 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Docker: Attach to Node",
+            "name": "Docker: Attach to Node with Kubernetes",
             "type": "node",
             "request": "attach",
             "port": 9229,
             "address": "localhost",
             "restart": true,
             "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/app"
+            "remoteRoot": "/app",
+            "preLaunchTask": "bridge-to-kubernetes.resource",
+            "env": {
+                "GRPC_DNS_RESOLVER": "native"
+            }
         }
     ]
 }

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    compose.cmd: docker-compose
+    compose.version: 1.31.2
+  labels:
+    io.compose.service: calculator
+  name: calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.compose.service: calculator
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        compose.cmd: docker-compose
+        compose.version: 1.31.2
+      labels:
+        io.compose.service: calculator
+    spec:
+      containers:
+        - image: sonawaneyogeshb/docker-watch:latest
+          name: calculator
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          ports:
+            - containerPort: 8000
+              hostPort: 8000
+              protocol: TCP            
+      restartPolicy: Always
+status: {}
