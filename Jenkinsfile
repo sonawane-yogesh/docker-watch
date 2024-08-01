@@ -3,10 +3,9 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "docker-watch"
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
-        DOCKER_IMAGE_TAG = "1.${env.BUILD_NUMBER}.0"
-        GIT_HELM_REPO = "docker-watch-helm"
+        DOCKER_IMAGE_TAG = "5.${env.BUILD_NUMBER}.0"
+        GIT_HELM_REPO = "devops-server-helm"
         GIT_EMAIL = "${GIT_EMAIL}"
-        KUBECONFIG = "/home/lablink/.kube/config"
     }    
     stages {        
         stage("Run Tests") {
@@ -21,27 +20,8 @@ pipeline {
                         echo "complated npm install"
                         echo "running executing tests..."
                         sh "npm run test"
-                        echo "completed executing tests"                        
-                        def coverageDir = "${JOB_URL}/htmlreports/coverage-reports"
-                        if (fileExists(coverageDir)) {
-                            dir(coverageDir) {
-                                publishHTML([
-                                    allowMissing: false,
-                                    alwaysLinkToLastBuild: false,
-                                    keepAll: false,
-                                    reportDir: "",
-                                    reportFiles: "index.html",
-                                    reportName: "coverage-reports",
-                                    reportTitles: "",
-                                    useWrapperFileDirectly: true
-                                ])
-                            }
-                        } else {
-                            echo "in else block of coverage report"
-                            error("Coverage directory not found: ${coverageDir}")
-                        }
+                        echo "completed executing tests" 
                     } catch (Exception exception) {
-                        echo "in catch block"
                         echo "Caught exception: ${exception.message}"
                     }                    
                 }                
@@ -88,7 +68,7 @@ pipeline {
         stage("Modify Deployment.yaml") {
             steps {
                 dir("__temp/${GIT_HELM_REPO}") {
-                    sh ("sed -i \'s|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g\' templates/deployment.yaml")
+                    sh ("sed -i -e \'s/tag: .*/tag: ${DOCKER_IMAGE_TAG}/\' templates/deployment.yaml")                    
                 }
             }
         }
@@ -108,18 +88,5 @@ pipeline {
                 }
             }
         }
-        // TODO: working on following stage to get it work
-        /*
-        stage("Install Helm Chart") {
-            steps {
-                dir("__temp/${GIT_HELM_REPO}") {
-                    sh ("helm lint .")
-                    sh ("helm template .")
-                    sh ("helm install --dry-run ${DOCKER_IMAGE_NAME} ./")
-                    sh ("helm install ${DOCKER_IMAGE_NAME} ./")
-                }
-            }
-        }
-        */
     }
 }
