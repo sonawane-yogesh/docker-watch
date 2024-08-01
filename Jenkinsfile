@@ -57,7 +57,7 @@ pipeline {
                 dir("__temp") {
                     withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
                         withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
-                            sh ("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
+                            sh ("git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/yogeshs-devops/${GIT_HELM_REPO}.git")
                             sh ("cd ${GIT_HELM_REPO}")
                         }
                     }
@@ -82,7 +82,7 @@ pipeline {
                             sh "git config --global user.email ${GIT_EMAIL}"
                             sh "git config --global user.name ${GIT_EMAIL}"
                             sh "git commit -m changed-image-tag--${DOCKER_IMAGE_TAG}--via-pipeline"
-                            sh ("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/${GIT_HELM_REPO}.git")
+                            sh ("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/yogeshs-devops/${GIT_HELM_REPO}.git")
                         }
                     }    
                 }
