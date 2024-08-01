@@ -65,10 +65,10 @@ pipeline {
             }
         }
         
-        stage("Modify Deployment.yaml") {
+        stage("Modify values.yaml") {
             steps {
                 dir("__temp/${GIT_HELM_REPO}") {
-                    sh ("sed -i -e \'s/tag: .*/tag: ${DOCKER_IMAGE_TAG}/\' templates/deployment.yaml")                    
+                    sh ("sed -i -e \'s/tag: .*/tag: ${DOCKER_IMAGE_TAG}/\' values.yaml")                    
                 }
             }
         }
