@@ -22,7 +22,7 @@ app.use((request, response, next) => {
 app.get("/", function (request, response) {
     response.status(200).json({ message: "App is up and running!!!" }).end();
 });
-app.get("/calc/add/:a/:b", function (request, response) {
+app.get("/add/:a/:b", function (request, response) {
     try {
         const a = parseInt(request.params.a);
         const b = parseInt(request.params.b);
