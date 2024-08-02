@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = "sonawaneyogeshb/docker-watch"
         DOCKER_IMAGE_TAG = "5.${env.BUILD_NUMBER}.0"
         GIT_HELM_REPO = "devops-server-helm"
-        GIT_EMAIL = "${GIT_EMAIL}"
+        GIT_EMAIL = "sonawaneyogeshb@gmail.com"
     }    
     stages {        
         stage("Run Tests") {
@@ -79,7 +79,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "git-credentials", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
                         withEnv(["GIT_USERNAME=${USERNAME}", "GIT_PASSWORD=${PASSWORD}"]) {
                             sh "git add ."
-                            sh "git config --global user.email ${GIT_EMAIL}"
+                            sh "git config --global user.email $GIT_EMAIL"
                             sh "git config --global user.name $GIT_USERNAME"
                             sh "git commit -m changed-image-tag--${DOCKER_IMAGE_TAG}--via-pipeline"
                             sh ("git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/yogeshs-devops/${GIT_HELM_REPO}.git")
