@@ -19,6 +19,23 @@ pipeline {
 
     stages {
 
+        stage('Verify Branch') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME != 'yogeshs') {
+                        currentBuild.result = 'NOT_BUILT'
+                        error("Skipping build for branch: ${env.BRANCH_NAME}")
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'echo Building...'
+            }
+        }
+
         // =========================================================
         // CHECKOUT SOURCE CODE
         // =========================================================
@@ -176,7 +193,7 @@ pipeline {
                     ]) {
 
                         sh '''
-                            git clone \
+                            git clone -b yogeshs \
                             https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/$GIT_HELM_REPO.git
                         '''
                     }
@@ -194,11 +211,11 @@ pipeline {
 
                     sh """
                         sed -i \
-                        's|^ *image:.*|        image: ${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}|g' \
-                        templates/deployment.yaml
+                        's|^  tag:.*|  tag: \"${DOCKER_IMAGE_TAG}\"|' \
+                        values.yaml
                     """
 
-                    sh 'cat templates/deployment.yaml'
+                    sh 'cat values.yaml'
                 }
             }
         }
@@ -220,7 +237,7 @@ pipeline {
                     ]) {
 
                         sh "git config --global user.email '${GIT_EMAIL}'"
-                        sh "git config --global user.name '${GIT_EMAIL}'"
+                        sh "git config --global user.name 'Jenkins CI'"
 
                         sh 'git add .'
 
@@ -231,7 +248,8 @@ pipeline {
 
                         sh '''
                             git push \
-                            https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/$GIT_HELM_REPO.git
+                            https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/$GIT_HELM_REPO.git \
+                            HEAD:yogeshs
                         '''
                     }
                 }
