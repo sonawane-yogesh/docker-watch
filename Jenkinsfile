@@ -57,8 +57,42 @@ pipeline {
                 echo 'Installing npm dependencies...'
                 sh 'npm install'
             }
-        }                
-       
+        }
+
+        // =========================================================
+        // RUN TESTS
+        // =========================================================
+        
+        stage('Run Tests') {
+            steps {
+                echo 'Running tests...'
+                sh 'npm run test'
+            }
+        }
+                
+        // =========================================================
+        // PUBLISH COVERAGE REPORT
+        // =========================================================
+
+        stage('Publish Coverage Report') {
+            steps {
+                script {
+                    if (fileExists("${COVERAGE_DIR}")) {
+                        publishHTML([
+                            allowMissing: true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "${COVERAGE_DIR}",
+                            reportFiles: 'index.html',
+                            reportName: 'Coverage Report'
+                        ])
+                    } else {
+                        echo "Coverage directory not found: ${COVERAGE_DIR}"
+                    }
+                }
+            }
+        }
+
         // =========================================================
         // BUILD DOCKER IMAGE
         // =========================================================
