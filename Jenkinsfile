@@ -17,18 +17,7 @@ pipeline {
         ansiColor('xterm')
     }
 
-    stages {
-
-        stage('Verify Branch') {
-            steps {
-                script {
-                    if (env.BRANCH_NAME != 'yogeshs') {
-                        currentBuild.result = 'NOT_BUILT'
-                        error("Skipping build for branch: ${env.BRANCH_NAME}")
-                    }
-                }
-            }
-        }
+    stages {       
 
         stage('Build') {
             steps {
@@ -73,16 +62,14 @@ pipeline {
         // =========================================================
         // RUN TESTS
         // =========================================================
-
-        /*
+        
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
                 sh 'npm run test'
             }
         }
-        */
-        
+                
         // =========================================================
         // PUBLISH COVERAGE REPORT
         // =========================================================
