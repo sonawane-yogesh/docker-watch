@@ -5,6 +5,6 @@ WORKDIR /app
 COPY . .
 RUN npm install
 ENV PORT=8000
-EXPOSE 8000
+EXPOSE 4000
 EXPOSE 9229
 CMD ["npm", "start"]

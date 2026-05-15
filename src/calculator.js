@@ -17,5 +17,7 @@ module.exports = {
         return true;
     }, githubWebhookCheck: function () {
         return true;
+    }, pipelineTest: function () {
+        return "Pipeline test successful!";
     }
 };
