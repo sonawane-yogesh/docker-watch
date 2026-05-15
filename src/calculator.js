@@ -13,11 +13,5 @@ module.exports = {
         return a * b;
     }, argoCheck: function (message) {
         return "Hello, from ArgoCD " + message;
-    }, watchCheck: function () {
-        return true;
-    }, githubWebhookCheck: function () {
-        return true;
-    }, pipelineTest: function () {
-        return "Pipeline test successful!";
     }
 };

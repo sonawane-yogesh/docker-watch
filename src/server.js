@@ -41,17 +41,14 @@ app.get("/subtract/:a/:b", function (request, response) {
 app.get("/multiply/:a/:b", function (request, response) {
     const a = parseInt(request.params.a);
     const b = parseInt(request.params.b);
-    const subtract = maths.multiply(a, b);
-    response.status(200).json({ data: subtract }).end();
+    const multiply = maths.multiply(a, b);
+    response.status(200).json({ data: multiply }).end();
 });
 app.get("/divide/:a/:b", function (request, response) {
     const a = parseInt(request.params.a);
     const b = parseInt(request.params.b);
     const divide = maths.divide(a, b);
     response.status(200).json({ data: divide }).end();
-});
-app.get("/pipeline-test", function (request, response) {
-    response.status(200).json({ message: 'App is up and running!' }).end();
 });
 /*
 const crtPath = resolve(join(__dirname, "..", 'certificates'));
