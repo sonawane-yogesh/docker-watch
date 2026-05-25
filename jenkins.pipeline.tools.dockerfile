@@ -1,7 +1,7 @@
 # File:
 # ./docker-files/jenkins.pipeline.tools.dockerfile
 
-FROM jenkins/jenkins:2.504.1-lts-jdk21
+FROM jenkins/jenkins:2.555.2-lts-jdk21
 
 USER root
 
@@ -21,8 +21,7 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     gnupg \
-    lsb-release \
-    software-properties-common
+    lsb-release
 
 # =========================================================
 # INSTALL DOCKER CLI
