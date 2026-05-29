@@ -268,18 +268,17 @@ pipeline {
     // =========================================================
 
     post {
-
         success {
-            echo 'Pipeline completed successfully.'
+            googlechatnotification(
+                url: 'https://chat.googleapis.com/v1/spaces/AAQAA5Knpwc/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=BnB0TCYqZxyKKtXMmQDmIOUFwSTXSr38WisgfP1ONlY',
+                message: "✅ *Build Success!* \nJob: ${env.JOB_NAME} \nBuild: #${env.BUILD_NUMBER} \n Link: ${env.BUILD_URL}"
+            )
         }
-
         failure {
-            echo 'Pipeline failed.'
-        }
-
-        always {
-            echo 'Cleaning workspace...'
-            cleanWs()
+            googlechatnotification(
+                url: 'https://chat.googleapis.com/v1/spaces/AAQAA5Knpwc/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=BnB0TCYqZxyKKtXMmQDmIOUFwSTXSr38WisgfP1ONlY',
+                message: "❌ *Build Failed!* \nJob: ${env.JOB_NAME} \nBuild: #${env.BUILD_NUMBER} \n Check logs: ${env.BUILD_URL}"
+            )
         }
     }
 }
